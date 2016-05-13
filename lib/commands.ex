@@ -15,7 +15,15 @@ defmodule DublinBusTelegramBot.Commands do
     |> Enum.map(&to_line/1)
     |> Enum.join("\n")
 
-    Nadia.send_message(chat_id, title <> "```\n#{timetable}```" ,@as_markdown)
+    keyboard = [["/stop #{stop}"] | data.timetable
+              |> Enum.map(fn r -> r.line end)
+            |> Enum.uniq
+            |> Enum.sort
+            |> Enum.map(fn l -> "/watch #{stop} #{l}" end)
+            |> Enum.chunk(3, 3, [])]
+
+    Nadia.send_message(chat_id, title <> "```\n#{timetable}```" , @as_markdown ++ [
+      {:reply_markup, %{keyboard: keyboard}}])
     data
   end
 
@@ -25,7 +33,8 @@ defmodule DublinBusTelegramBot.Commands do
       task: fn -> send_short_message(chat_id, stop, line) end
     }
     Quantum.add_job(chat_id, job)
-    Nadia.send_message(chat_id, "Watch set")
+    Nadia.send_message(chat_id, "Watch set",[
+          {:reply_markup, %{keyboard: [["/unwatch"]]}}])
     send_short_message(chat_id, stop, line)
     %{}
   end
@@ -37,8 +46,6 @@ defmodule DublinBusTelegramBot.Commands do
 
   def search(chat_id, q) do
     data = Stop.search(q)
-
-    IO.inspect(data)
 
     case length(data) do
       1 ->
@@ -69,7 +76,9 @@ defmodule DublinBusTelegramBot.Commands do
       Logger.info("[#{chat_id}] Remove watch stop #{stop} line #{line}")
     end
 
-    Nadia.send_message(chat_id, "```#{row |> to_line}```", @as_markdown)
+    if row != nil do
+      Nadia.send_message(chat_id, "```#{row |> to_line}```", @as_markdown)
+    end
   end
 
   def not_implemented(chat_id, command) do
