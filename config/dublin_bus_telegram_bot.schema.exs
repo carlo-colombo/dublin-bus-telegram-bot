@@ -78,9 +78,13 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
   ],
   transforms: [
     "nadia.token": fn conf ->
-    [{_, val}] = Conform.Conf.get(conf, "nadia.token")
-    System.get_env("TELEGRAM_BOT_TOKEN") || val
-  end
+      [{_, val}] = Conform.Conf.get(conf, "nadia.token")
+      System.get_env("TELEGRAM_BOT_TOKEN") || val
+    end,
+    "dublin_bus_telegram_bot.base_address": fn conf ->
+      [{_, val}] = Conform.Conf.get(conf, "dublin_bus_telegram_bot.base_address")
+      System.get_env("BASE_ADDRESS") || val
+    end
   ],
   validators: []
 ]
