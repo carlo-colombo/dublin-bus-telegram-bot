@@ -20,16 +20,17 @@ defmodule DublinBusTelegramBot.Mixfile do
         :quantum,
         :maru,
         :edib,
+        :httpoison,
         :dublin_bus_api,
         :commander,
         :conform,
         :conform_exrm] ++ dev_apps(Mix.env, [:exsync]),
-    mod: {DublinBusTelegramBot, []}]
+    mod: {DublinBusTelegramBot, [Mix.env]}]
   end
 
 
-  defp dev_apps(:prod, _), do: []
-  defp dev_apps(_, list), do: list
+  defp dev_apps(:dev, list), do: list
+  defp dev_apps(_, _), do: []
 
   # Dependencies can be Hex packages:
   #
@@ -43,6 +44,7 @@ defmodule DublinBusTelegramBot.Mixfile do
   defp deps do
     [{:nadia, "~> 0.3"},
      {:quantum, ">= 1.6.1"},
+     {:httpoison, "~> 0.8"},
      {:dublin_bus_api, "~> 0.1"},
      {:maru, "~> 0.9.2"},
      {:exsync, "~> 0.1", only: :dev},

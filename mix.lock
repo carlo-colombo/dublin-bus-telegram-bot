@@ -8,7 +8,7 @@
   "cowboy": {:hex, :cowboy, "1.0.4"},
   "cowlib": {:hex, :cowlib, "1.0.2"},
   "dublin_bus_api": {:hex, :dublin_bus_api, "0.1.7"},
-  "edib": {:git, "https://github.com/edib-tool/mix-edib", "e07b8a2224cfc294e9733d0ebf45db157a5c413a", []},
+  "edib": {:git, "https://github.com/edib-tool/mix-edib", "3140f9ebae3fe30123d52e6dcdcf9cd1613709fe", []},
   "erlware_commons": {:hex, :erlware_commons, "0.19.0"},
   "exfswatch": {:hex, :exfswatch, "0.1.1"},
   "exrm": {:hex, :exrm, "1.0.4"},
