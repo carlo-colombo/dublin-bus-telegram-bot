@@ -52,7 +52,7 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
   extends: [],
   import: [],
   mappings: [
-    "nadia.token2": [
+    "nadia.token": [
       commented: false,
       datatype: :binary,
       doc: "Provide documentation for nadia.token here.",
@@ -74,6 +74,13 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
       doc: "Provide documentation for dublin_bus_telegram_bot.base_address here.",
       hidden: false,
       to: "dublin_bus_telegram_bot.base_address"
+    ],
+    "dublin_bus_telegram_bot.google_analytics": [
+      commented: false,
+      datatype: :binary,
+      doc: "Provide documentation for dublin_bus_telegram_bot.google_analytics here.",
+      hidden: false,
+      to: "dublin_bus_telegram_bot.google_analytics"
     ]
   ],
   transforms: [
@@ -84,6 +91,10 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
     "dublin_bus_telegram_bot.base_address": fn conf ->
       [{_, val}] = Conform.Conf.get(conf, "dublin_bus_telegram_bot.base_address")
       System.get_env("BASE_ADDRESS") || val
+    end,
+    "dublin_bus_telegram_bot.google_analytics": fn conf ->
+      [{_, val}] = Conform.Conf.get(conf, "dublin_bus_telegram_bot.google_analytics")
+      System.get_env("GOOGLE_ANALYTICS") || val
     end
   ],
   validators: []
