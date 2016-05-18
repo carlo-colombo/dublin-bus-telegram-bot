@@ -32,7 +32,7 @@ defmodule DublinBusTelegramBot.Hook do
 
   use Commander
 
-  dispatch to: DublinBusTelegramBot.Commands do
+  dispatch to: Commands do
     command "/stop",   [:stop]
     command "/watch",  [:stop, :line ]
     command "/search", [:q]
