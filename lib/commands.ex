@@ -2,8 +2,9 @@ defmodule DublinBusTelegramBot.Commands do
   require Logger
 
   @as_markdown [{:parse_mode, "Markdown"}]
+  import DublinBusTelegramBot.Meter
 
-  def stop(chat_id, stop) do
+  defmeter stop(chat_id, stop) do
     Stop.get_info(stop)
     |> send_timetable(chat_id, stop)
   end
@@ -27,7 +28,7 @@ defmodule DublinBusTelegramBot.Commands do
     data
   end
 
-  def watch(chat_id, stop, line) do
+  defmeter watch(chat_id, stop, line) do
     job = %Quantum.Job{
       schedule: "* * * * *",
       task: fn -> send_short_message(chat_id, stop, line) end
@@ -39,12 +40,12 @@ defmodule DublinBusTelegramBot.Commands do
     %{}
   end
 
-  def unwatch(chat_id) do
+  defmeter unwatch(chat_id) do
     Quantum.delete_job(chat_id)
     %{}
   end
 
-  def search(chat_id, q) do
+  defmeter search(chat_id, q) do
     data = Stop.search(q)
 
     case length(data) do
