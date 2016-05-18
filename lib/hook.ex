@@ -43,19 +43,21 @@ defmodule DublinBusTelegramBot.Hook do
   def polling(offset \\ 0) do
     # Logger.info("Polling, offset: #{offset}")
 
-    {:ok, updates } = Nadia.get_updates([{:offset, offset}])
-    update_id = for update <- updates do
-      entry_point(update)
-      update.update_id
-    end |> List.last
+    try do
+      {:ok, updates } = Nadia.get_updates([{:offset, offset}])
+      update_id = for update <- updates do
+        entry_point(update)
+        update.update_id
+      end |> List.last
 
-    offset = if update_id == nil do
-      offset
-    else
-      update_id + 1
-    end
+      offset = if update_id == nil do
+        offset
+      else
+        update_id + 1
+      end
 
-    :timer.sleep(2000)
-    spawn(fn  -> polling(offset) end)
+      :timer.sleep(2000)
+      spawn(fn  -> polling(offset) end)
+    catch _->nil end
   end
 end
