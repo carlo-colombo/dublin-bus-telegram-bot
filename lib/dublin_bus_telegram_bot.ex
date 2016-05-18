@@ -12,10 +12,12 @@ defmodule DublinBusTelegramBot do
 
   mount DublinBusTelegramBot.Hook
 
-  def start(_,_) do
+
+  def start(_,[:test]), do: {:ok, self}
+
+  def start(_,[:prod]) do
     base_address = Application.get_env(:dublin_bus_telegram_bot, :base_address)
     token = Application.get_env(:nadia, :token)
-
     hook = "#{base_address}/#{token}/hook"
 
     case Nadia.set_webhook([{:url, hook}]) do
@@ -27,6 +29,11 @@ defmodule DublinBusTelegramBot do
         Logger.debug "Set up webhook #{hook}: #{inspect(resp)}"
     end
 
+    {:ok, self}
+  end
+  def start(_,_) do
+    Logger.info("Setting up polling")
+    DublinBusTelegramBot.Hook.polling()
     {:ok, self}
   end
 
