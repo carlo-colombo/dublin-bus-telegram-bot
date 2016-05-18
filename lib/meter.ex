@@ -11,7 +11,7 @@ defmodule DublinBusTelegramBot.Meter do
     dimensions = env[:ga_dimensions]
 
     if tid != nil do
-      cd = 1..3
+      cd = 1..length(dimensions)
       |> Enum.map(fn i -> "cd#{i}" end)
       |> Enum.zip(dimensions)
       |> Enum.map(fn {cdi,argname} -> {cdi, kwargs[argname]} end )
@@ -22,14 +22,17 @@ defmodule DublinBusTelegramBot.Meter do
                  tid: tid,
                  t: "pageview",
                  ds: "bot",
-                 dp: command
+                 dp: "/#{command}"
                ] ++ cd}
+
+      Logger.info("form #{inspect(body)}")
 
       spawn fn ->
         case HTTPoison.post("https://www.google-analytics.com/collect", body) do
           {:ok, resp} -> IO.puts("sent #{inspect(resp)}")
           {:error, error} -> IO.puts("Error #{inspect(error)}")
         end
+        Logger.info('Tracking sent to GA')
       end
     end
   end
