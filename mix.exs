@@ -49,7 +49,7 @@ defmodule DublinBusTelegramBot.Mixfile do
      {:maru, "~> 0.9.2"},
      {:exsync, "~> 0.1", only: :dev},
      {:exrm, "~> 1.0.3", override: true},
-     {:edib, git: "https://github.com/edib-tool/mix-edib"},
+     {:edib, "~> 0.7"},
      {:conform, "~> 2.0", override: true},
      {:conform_exrm, "~> 1.0"},
      {:commander, "~> 0.1"}
