@@ -1,5 +1,5 @@
 defmodule DublinBusTelegramBot.Meter do
-  use Logger
+  require Logger
 
   def log(command, kwargs) do
     Logger.info("inspect #{command}(#{inspect(kwargs)})")
