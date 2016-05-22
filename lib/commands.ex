@@ -9,25 +9,6 @@ defmodule DublinBusTelegramBot.Commands do
     |> send_timetable(chat_id, stop)
   end
 
-  defp send_timetable(data,chat_id, stop) do
-    title = "*#{stop} - #{data.name}*\n"
-
-    timetable = data.timetable
-    |> Enum.map(&to_line/1)
-    |> Enum.join("\n")
-
-    keyboard = [["/stop #{stop}"] | data.timetable
-              |> Enum.map(fn r -> r.line end)
-            |> Enum.uniq
-            |> Enum.sort
-            |> Enum.map(fn l -> "/watch #{stop} #{l}" end)
-            |> Enum.chunk(3, 3, [])]
-
-    Nadia.send_message(chat_id, title <> "```\n#{timetable}```" , @as_markdown ++ [
-      {:reply_markup, %{keyboard: keyboard}}])
-    data
-  end
-
   defmeter watch(chat_id, stop, line) do
     job = %Quantum.Job{
       schedule: "* * * * *",
@@ -66,6 +47,35 @@ defmodule DublinBusTelegramBot.Commands do
     data
   end
 
+  defmeter not_implemented(chat_id, command) do
+    Nadia.send_message(chat_id, "Not yet implemented")
+
+    warn = "#{command} not yet implemented"
+    |> Logger.warn
+
+    %{warn: warn}
+  end
+
+  defp send_timetable(data,chat_id, stop) do
+    title = "*#{stop} - #{data.name}*\n"
+
+    timetable = data.timetable
+    |> Enum.map(&to_line/1)
+    |> Enum.join("\n")
+
+    keyboard = [["/stop #{stop}"] | data.timetable
+                 |> Enum.map(fn r -> r.line end)
+               |> Enum.uniq
+               |> Enum.sort
+               |> Enum.map(fn l -> "/watch #{stop} #{l}" end)
+               |> Enum.chunk(3, 3, [])]
+
+    Nadia.send_message(chat_id, title <> "```\n#{timetable}```" , @as_markdown ++ [
+      {:reply_markup, %{keyboard: keyboard}}])
+    data
+  end
+
+
   defp send_short_message(chat_id, stop, line) do
     data = Stop.get_info(stop)
 
@@ -80,15 +90,6 @@ defmodule DublinBusTelegramBot.Commands do
     if row != nil do
       Nadia.send_message(chat_id, "```#{row |> to_line}```", @as_markdown)
     end
-  end
-
-  def not_implemented(chat_id, command) do
-    Nadia.send_message(chat_id, "Not yet implemented")
-
-    warn = "#{command} not yet implemented"
-    |> Logger.warn
-
-    %{warn: warn}
   end
 
   defp to_line(%{time: time, line: line}) do
