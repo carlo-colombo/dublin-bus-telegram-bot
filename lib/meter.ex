@@ -1,9 +1,7 @@
 defmodule DublinBusTelegramBot.Meter do
   require Logger
 
-  def log(command, kwargs) do
-    Logger.info("inspect #{command}(#{inspect(kwargs)})")
-
+  def track(function_name, kwargs) do
     env = Application.get_all_env(:dublin_bus_telegram_bot)
 
     tid = env[:google_analytics]
@@ -11,6 +9,8 @@ defmodule DublinBusTelegramBot.Meter do
     dimensions = env[:ga_dimensions]
 
     if tid != nil do
+      Logger.info("Tracking inspect #{function_name}(#{inspect(kwargs)})")
+
       cd = 1..length(dimensions)
       |> Enum.map(fn i -> "cd#{i}" end)
       |> Enum.zip(dimensions)
@@ -22,27 +22,19 @@ defmodule DublinBusTelegramBot.Meter do
                  tid: tid,
                  t: "pageview",
                  ds: "bot",
-                 dp: "/#{command}"
+                 dp: "/#{function_name}"
                ] ++ cd}
 
       Logger.info("form #{inspect(body)}")
 
       spawn fn ->
         case HTTPoison.post("https://www.google-analytics.com/collect", body) do
-          {:ok, resp} -> IO.puts("sent #{inspect(resp)}")
-          {:error, error} -> IO.puts("Error #{inspect(error)}")
+          {:ok, resp} -> Logger.info("sent #{inspect(resp)}")
+          {:error, error} -> Logger.warn("Error #{inspect(error)}")
         end
-        Logger.info('Tracking sent to GA')
       end
     end
   end
-
-  defp get_body({:ok,
-                 %HTTPoison.Response{status_code: 200,
-                                     body: body}}) do
-    {:ok, body}
-  end
-
 
   defmacro defmeter({function,_,args}=fundef, [do: body]) do
     names = args
@@ -58,7 +50,7 @@ defmodule DublinBusTelegramBot.Meter do
                    end)
                  )
                  map = Enum.zip(unquote(names), values)
-                 log(unquote(function), map)
+                 track(unquote(function), map)
                end, body]}
 
     quote do
