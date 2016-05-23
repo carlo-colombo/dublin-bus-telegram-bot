@@ -37,6 +37,7 @@ defmodule DublinBusTelegramBot.Hook do
     command "/watch",  [:stop, :line ]
     command "/search", [:q]
     command "/unwatch",[]
+    command "/start",  []
   end
 
 
