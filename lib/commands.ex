@@ -30,7 +30,8 @@ Stop watch
 Search stops that match the name, if only one result is found it send also the timetable.
 ``` /search Townsend Street```
 
-    ", @as_markdown)
+", @as_markdown)
+   %{}
   end
 
   defmeter stop(chat_id, stop) do
