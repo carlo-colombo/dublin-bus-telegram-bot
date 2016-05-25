@@ -1,4 +1,5 @@
 %{"bbmustache": {:hex, :bbmustache, "1.0.4", "7ba94f971c5afd7b6617918a4bb74705e36cab36eb84b19b6a1b7ee06427aa38", [:rebar], []},
+  "bunt": {:hex, :bunt, "0.1.6", "5d95a6882f73f3b9969fdfd1953798046664e6f77ec4e486e6fafc7caad97c6f", [:mix], []},
   "certifi": {:hex, :certifi, "0.4.0", "a7966efb868b179023618d29a407548f70c52466bf1849b9e8ebd0e34b7ea11f", [:rebar3], []},
   "cf": {:hex, :cf, "0.2.1", "69d0b1349fd4d7d4dc55b7f407d29d7a840bf9a1ef5af529f1ebe0ce153fc2ab", [:rebar3], []},
   "combine": {:hex, :combine, "0.8.0", "390fe5f632a8c890d378abc697ca7c4c52cd3e38bb232a5cad1677cd4af013df", [:mix], []},
@@ -7,6 +8,7 @@
   "conform_exrm": {:hex, :conform_exrm, "1.0.0", "68d5923a74dad4169b51454d723d08ca1644b6a6deaf64eccd509fd084cd1343", [:mix], [{:exrm, "> 0.0.0", [hex: :exrm, optional: false]}, {:conform, "> 0.0.0", [hex: :conform, optional: false]}]},
   "cowboy": {:hex, :cowboy, "1.0.4", "a324a8df9f2316c833a470d918aaf73ae894278b8aa6226ce7a9bf699388f878", [:rebar, :make], [{:cowlib, "~> 1.0.0", [hex: :cowlib, optional: false]}, {:ranch, "~> 1.0", [hex: :ranch, optional: false]}]},
   "cowlib": {:hex, :cowlib, "1.0.2", "9d769a1d062c9c3ac753096f868ca121e2730b9a377de23dec0f7e08b1df84ee", [:make], []},
+  "credo": {:hex, :credo, "0.3.13", "90d2d2deb9d376bb2a63f81126a320c3920ce65acb1294982ab49a8aacc7d89f", [:mix], [{:bunt, "~> 0.1.4", [hex: :bunt, optional: false]}]},
   "dublin_bus_api": {:hex, :dublin_bus_api, "0.1.8", "2078b1d0b006ae8eef3aa0f75ca0a40f564b68808ad9990b195f49f8ef58074d", [:mix], [{:httpoison, "~> 0.8", [hex: :httpoison, optional: false]}, {:floki, "~> 0.7", [hex: :floki, optional: false]}]},
   "edib": {:hex, :edib, "0.7.0", "2c08bf1a3bb9c0deaf51d23a00a220e8fec141faa2f29f0b393395b3e43ca0bc", [:mix], []},
   "erlware_commons": {:hex, :erlware_commons, "0.19.0", "7b43caf2c91950c5f60dc20451e3c3afba44d3d4f7f27bcdc52469285a5a3e70", [:rebar3], [{:cf, "0.2.1", [hex: :cf, optional: false]}]},

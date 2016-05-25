@@ -52,7 +52,8 @@ defmodule DublinBusTelegramBot.Mixfile do
      {:edib, "~> 0.7"},
      {:conform, "~> 2.0", override: true},
      {:conform_exrm, "~> 1.0"},
-     {:commander, "~> 0.1"}
+     {:commander, "~> 0.1"},
+     {:credo, "~> 0.3", only: [:test, :dev]}
     ]
   end
 end
