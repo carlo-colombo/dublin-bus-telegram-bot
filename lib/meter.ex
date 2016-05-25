@@ -11,27 +11,34 @@ defmodule DublinBusTelegramBot.Meter do
     if tid != nil do
       Logger.info("Tracking inspect #{function_name}(#{inspect(kwargs)})")
 
-      cd = 1..length(dimensions)
-      |> Enum.map(fn i -> "cd#{i}" end)
-      |> Enum.zip(dimensions)
-      |> Enum.map(fn {cdi,argname} -> {cdi, kwargs[argname]} end )
-
       body = {:form, [
                  v: 1,
                  cid: kwargs[mapping[:cid]],
                  tid: tid,
                  t: "pageview",
                  ds: "bot",
+                 dt: "#{function_name}",
                  dp: "/#{function_name}"
-               ] ++ cd}
+               ] ++ custom_dimensions(dimensions, kwargs)}
 
       Logger.info("form #{inspect(body)}")
 
-      spawn fn ->
-        case HTTPoison.post("https://www.google-analytics.com/collect", body) do
-          {:ok, resp} -> Logger.info("sent #{inspect(resp)}")
-          {:error, error} -> Logger.warn("Error #{inspect(error)}")
-        end
+      send_request(body)
+    end
+  end
+
+  defp custom_dimensions(dimensions, kwargs) do
+    1..length(dimensions)
+    |> Enum.map(fn i -> "cd#{i}" end)
+    |> Enum.zip(dimensions)
+    |> Enum.map(fn {cdi,argname} -> {cdi, kwargs[argname]} end )
+  end
+
+  defp send_request(body) do
+    spawn fn ->
+      case HTTPoison.post("https://www.google-analytics.com/collect", body) do
+        {:ok, resp} -> Logger.info("sent #{inspect(resp)}")
+        {:error, error} -> Logger.warn("Error #{inspect(error)}")
       end
     end
   end
