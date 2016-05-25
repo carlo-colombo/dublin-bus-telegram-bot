@@ -9,15 +9,10 @@ defmodule DublinBusTelegramBot.Hook do
     namespace :hook do
       post do
         data = conn.body_params
-        json conn, entry_point(data) |> get_resp
-      end
-
-      get do
-        {:ok, messages } = Nadia.get_updates
-        json conn, messages
-        |> List.last
         |> entry_point
         |> get_resp
+
+        json conn, data
       end
     end
 
@@ -40,10 +35,7 @@ defmodule DublinBusTelegramBot.Hook do
     command "/start",  []
   end
 
-
   def polling(offset \\ 0) do
-    # Logger.info("Polling, offset: #{offset}")
-
     try do
       {:ok, updates } = Nadia.get_updates([{:offset, offset}])
       update_id = for update <- updates do
