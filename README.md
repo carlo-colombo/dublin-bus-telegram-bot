@@ -18,7 +18,7 @@ Send you a message every minute with ETA of the bus at the stop. It stop after t
 
 #### /unwatch
 Stop watch
-``` /unwatch```
+``` /unwatch ```
 
 #### /search <query>
 Search stops that match the name, if only one result is found it send also the timetable.
