@@ -26,7 +26,7 @@ Search stops that match the name, if only one result is found it send also the t
 
 #### /info
 Return some info about the bot
-``` /info```
+``` /info ```
 
 
 ### Docker
