@@ -33,6 +33,7 @@ defmodule DublinBusTelegramBot.Hook do
     command "/search", [:q]
     command "/unwatch",[]
     command "/start",  []
+    command "/info",  []
   end
 
   def polling(offset \\ 0) do

@@ -39,6 +39,21 @@ Search stops that match the name, if only one result is found it send also the t
     |> send_timetable(chat_id, stop)
   end
 
+  defmeter info(chat_id) do
+    apps = Application.loaded_applications
+    {_, _, app_version} = List.keyfind(apps, :dublin_bus_telegram_bot, 0)
+    {_, _, api_version} = List.keyfind(apps, :dublin_bus_api, 0)
+
+    Nadia.send_message(chat_id, """
+Bot version: *#{app_version}*
+API version: *#{api_version}*
+API last time checked: *#{Stop.last_time_checked_formatted}*
+    """, @as_markdown)
+
+    Stop.last_time_checked_formatted
+    %{}
+  end
+
   defmeter watch(chat_id, stop, line) do
     job = %Quantum.Job{
       schedule: "* * * * *",
