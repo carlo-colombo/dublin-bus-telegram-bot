@@ -2,7 +2,7 @@
 
 Welcome to the Dublin Bus bot:
 
-Access to the *Real Time Passenger Information (RTPI)* for Dublin Bus services. Data are retrieved parsing the still-in-development RTPI site. The html could change without notice and break the API, we don't take any responsability for lost bus. The bot is precise as the dublin bus application or the screen at the stops.
+Access to the *Real Time Passenger Information (RTPI)* for Dublin Bus services. Data are retrieved parsing the still-in-development RTPI site. The html could change without notice and break the API, we don't take any responsibility for missed bus. The bot is precise as the dublin bus application or the screen at the stops.
 
 _This service is in no way affiliated with Dublin Bus or the providers of the RTPI service_.
 
