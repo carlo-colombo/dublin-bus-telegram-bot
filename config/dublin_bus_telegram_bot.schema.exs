@@ -75,12 +75,12 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
       hidden: false,
       to: "dublin_bus_telegram_bot.base_address"
     ],
-    "dublin_bus_telegram_bot.google_analytics": [
+    "meter.tid": [
       commented: false,
       datatype: :binary,
       doc: "Provide documentation for dublin_bus_telegram_bot.google_analytics here.",
       hidden: false,
-      to: "dublin_bus_telegram_bot.google_analytics"
+      to: "meter.tid"
     ]
   ],
   transforms: [
@@ -92,8 +92,8 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
       [{_, val}] = Conform.Conf.get(conf, "dublin_bus_telegram_bot.base_address")
       System.get_env("BASE_ADDRESS") || val
     end,
-    "dublin_bus_telegram_bot.google_analytics": fn conf ->
-      [{_, val}] = Conform.Conf.get(conf, "dublin_bus_telegram_bot.google_analytics")
+    "meter.tid": fn conf ->
+      [{_, val}] = Conform.Conf.get(conf, "meter.tid")
       System.get_env("GOOGLE_ANALYTICS") || val
     end
   ],

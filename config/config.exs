@@ -17,9 +17,11 @@ config :maru, DublinBusTelegramBot,
 http: [port: port]
 
 config :dublin_bus_telegram_bot,
-  google_analytics: google_analytics,
-  base_address: base_address,
-  ga_mapping: [
+  base_address: base_address
+
+config :meter,
+  tid: google_analytics,
+  dimensions:  [:stop, :line, :q],
+  mapping: [
     cid: :chat_id
-  ],
-  ga_dimensions: [:stop, :line, :q]
+  ]

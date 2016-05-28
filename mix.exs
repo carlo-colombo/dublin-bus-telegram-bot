@@ -23,6 +23,7 @@ defmodule DublinBusTelegramBot.Mixfile do
         :httpoison,
         :dublin_bus_api,
         :commander,
+        :meter,
         :conform,
         :conform_exrm] ++ dev_apps(Mix.env, [:exsync]),
     mod: {DublinBusTelegramBot, [Mix.env]}]
@@ -53,6 +54,7 @@ defmodule DublinBusTelegramBot.Mixfile do
      {:conform, "~> 2.0", override: true},
      {:conform_exrm, "~> 1.0"},
      {:commander, "~> 0.1"},
+     {:meter, "~> 0.1"},
      {:credo, "~> 0.3", only: [:test, :dev]}
     ]
   end

@@ -1,8 +1,8 @@
 defmodule DublinBusTelegramBot.Commands do
   require Logger
+  import Meter
 
   @as_markdown [{:parse_mode, "Markdown"}]
-  import DublinBusTelegramBot.Meter
 
   defmeter start(chat_id) do
     Nadia.send_message(chat_id, "
