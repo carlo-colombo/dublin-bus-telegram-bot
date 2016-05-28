@@ -52,6 +52,8 @@ Search stops that match the name, if only one result is found it send also the t
 Bot version: *#{app_version}*
 API version: *#{api_version}*
 API last time checked: *#{Stop.last_time_checked_formatted}*
+
+Bot icon made by Baianat from www.flaticon.com
     """, @as_markdown)
 
     Stop.last_time_checked_formatted
