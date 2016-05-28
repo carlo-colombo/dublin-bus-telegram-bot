@@ -1,20 +1,34 @@
 # DublinBusTelegramBot
 
-**TODO: Add description**
+Welcome to the Dublin Bus bot:
 
-## Installation
+Access to the *Real Time Passenger Information (RTPI)* for Dublin Bus services. Data are retrieved parsing the still-in-development RTPI site. The html could change without notice and break the API, we don't take any responsability for lost bus. The bot is precise as the dublin bus application or the screen at the stops.
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
+_This service is in no way affiliated with Dublin Bus or the providers of the RTPI service_.
 
-  1. Add dublin_bus_telegram_bot to your list of dependencies in `mix.exs`:
+### Available commands
 
-        def deps do
-          [{:dublin_bus_telegram_bot, "~> 0.0.1"}]
-        end
+#### /stop <stop number>
+Retrieve upcoming timetable at this stop
+``` /stop 4242```
 
-  2. Ensure dublin_bus_telegram_bot is started before your application:
+#### /watch <stop number> <line>
+Send you a message every minute with ETA of the bus at the stop. It stop after the bus is Due or until command unwatch is sent. Only one watch at time is possible.
+``` /watch 4242 184```
 
-        def application do
-          [applications: [:dublin_bus_telegram_bot]]
-        end
+#### /unwatch
+Stop watch
+``` /unwatch ```
 
+#### /search <query>
+Search stops that match the name, if only one result is found it send also the timetable.
+``` /search Townsend Street```
+
+#### /info
+Return some info about the bot
+``` /info ```
+
+
+### Docker
+
+    docker run --rm -P -e 'TELEGRAM_BOT_TOKEN=<your-token-here>' carlocolombo/dublin_bus_telegram_bot
