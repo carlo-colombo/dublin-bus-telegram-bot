@@ -2,7 +2,7 @@ defmodule Mix.Tasks.DockerPush do
   use Mix.Task
 
   alias DublinBusTelegramBot.Mixfile
-  alias Mix.Tasks
+  alias Mix.Tasks.Edib
 
   def run(_args) do
     Edib.run(["--hex", "--strip"])
