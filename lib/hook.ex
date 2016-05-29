@@ -6,10 +6,6 @@ defmodule DublinBusTelegramBot.Hook do
   require Logger
 
   route_param :token do
-    params do
-      requires :token, type: Integer
-    end
-
     namespace :hook do
       post do
         data = conn.body_params
