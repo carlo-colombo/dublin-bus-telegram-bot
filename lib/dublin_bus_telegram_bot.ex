@@ -10,6 +10,7 @@ defmodule DublinBusTelegramBot do
     pass:  ["text/*"],
     json_decoder: Poison
 
+  plug TokenValidation, paths: [:status, :hook]
   mount DublinBusTelegramBot.Hook
 
 
