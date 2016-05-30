@@ -31,7 +31,7 @@ defmodule DublinBusTelegramBot.Hook do
     |> Logger.error
 
     conn
-    |> send_resp(201,"#{inspect(e)} - sending 201 anyway")
+    |> send_resp(200,"#{inspect(e)} - sending 200 anyway")
   end
 
   defp get_resp({_, resp}), do: resp
