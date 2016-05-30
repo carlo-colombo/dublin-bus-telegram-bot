@@ -26,6 +26,14 @@ defmodule DublinBusTelegramBot.Hook do
     end
   end
 
+  rescue_from :all, as: e do
+    inspect(e)
+    |> Logger.error
+
+    conn
+    |> send_resp(201,"#{inspect(e)} - sending 201 anyway")
+  end
+
   defp get_resp({_, resp}), do: resp
 
   use Commander
