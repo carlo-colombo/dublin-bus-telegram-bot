@@ -37,4 +37,10 @@ defmodule DublinBusTelegramBot do
     DublinBusTelegramBot.Hook.polling()
     {:ok, self}
   end
+
+  rescue_from :all do
+    conn
+    |> put_status(200)
+    |> text("Server Error")
+  end
 end

@@ -5,14 +5,32 @@ defmodule DublinBusTelegramBot.Hook do
 
   require Logger
 
+  # rescue_from :all, as: e do
+  #   conn
+  #   |> send_resp(200,"#{inspect(e)} - sending 200 anyway")
+  # end
+
   route_param :token do
     namespace :hook do
       post do
-        data = conn.body_params
+        conn.body_params
         |> entry_point
         |> get_resp
 
-        json conn, data
+        json conn, %{}
+      end
+
+      get do
+        {:ok, messages } = Nadia.get_updates
+        messages
+        |> IO.inspect
+        |> List.last
+        |> IO.inspect
+        |> entry_point
+        |> IO.inspect
+        |> get_resp
+        |> IO.inspect
+        json conn, %{}
       end
     end
 
@@ -24,17 +42,15 @@ defmodule DublinBusTelegramBot.Hook do
         json conn, %{ok: "System is running"}
       end
     end
-  end
 
-  rescue_from :all, as: e do
-    inspect(e)
-    |> Logger.error
-
-    conn
-    |> send_resp(200,"#{inspect(e)} - sending 200 anyway")
+    # rescue_from :all, as: e do
+    #   conn
+    #   |> send_resp(200,"#{inspect(e)} - sending 200 anyway")
+    # end
   end
 
   defp get_resp({_, resp}), do: resp
+  defp get_resp(t), do: %{}
 
   use Commander
 
