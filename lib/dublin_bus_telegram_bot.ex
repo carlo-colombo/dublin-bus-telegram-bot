@@ -37,13 +37,4 @@ defmodule DublinBusTelegramBot do
     DublinBusTelegramBot.Hook.polling()
     {:ok, self}
   end
-
-  rescue_from :all, as: e do
-    inspect(e)
-    |> Logger.error
-
-    conn
-    |> put_status(500)
-    |> text("Run time error: #{e.__struct__}")
-  end
 end
