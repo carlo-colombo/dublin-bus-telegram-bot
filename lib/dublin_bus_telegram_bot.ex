@@ -13,6 +13,7 @@ defmodule DublinBusTelegramBot do
   plug TokenValidation, paths: [:status, :hook]
   mount DublinBusTelegramBot.Hook
 
+  plug :set_200
 
   def start(_,[:test]), do: {:ok, self}
 
@@ -38,9 +39,18 @@ defmodule DublinBusTelegramBot do
     {:ok, self}
   end
 
-  rescue_from :all do
+  rescue_from :all, as: e do
+    Logger.error("Exception: #{inspect(e)}")
+
     conn
     |> put_status(200)
     |> text("Server Error")
+  end
+
+  defp set_200(conn, _options) do
+    Logger.info("old status #{inspect(conn.status)}")
+    conn = put_status(conn, 200)
+    Logger.info("new status #{inspect(conn.status)}")
+    conn
   end
 end
