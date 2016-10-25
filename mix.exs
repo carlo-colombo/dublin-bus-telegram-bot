@@ -24,9 +24,9 @@ defmodule DublinBusTelegramBot.Mixfile do
         :dublin_bus_api,
         :commander,
         :meter,
-        :conform,
-        :conform_exrm] ++ dev_apps(Mix.env, [:exsync]),
-    mod: {DublinBusTelegramBot, [Mix.env]}]
+        :conform
+      ] ++ dev_apps(Mix.env, [:exsync]),
+      mod: {DublinBusTelegramBot, [Mix.env]}]
   end
 
 
@@ -43,19 +43,18 @@ defmodule DublinBusTelegramBot.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:nadia, "~> 0.3"},
-     {:quantum, ">= 1.6.1"},
+    [{:nadia, "~> 0.4"},
+     {:quantum, "~> 1.8"},
      {:httpoison, "~> 0.8"},
      {:dublin_bus_api, "~> 0.1"},
      {:maru, "~> 0.9.2"},
      {:exsync, "~> 0.1", only: :dev},
-     {:exrm, "~> 1.0.3", override: true},
+     {:distillery, "~> 0.10"},
      {:edib, "~> 0.7"},
      {:conform, "~> 2.0", override: true},
-     {:conform_exrm, "~> 1.0"},
      {:commander, "~> 0.1"},
      {:meter, "~> 0.1"},
      {:credo, "~> 0.3", only: [:test, :dev]}
-    ]
+   ]
   end
 end
