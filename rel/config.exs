@@ -16,13 +16,13 @@ use Mix.Releases.Config,
 environment :dev do
   set dev_mode: true
   set include_erts: false
-  set cookie: :"[%j.HEFsZOPY*cqDq+Oz}If3O9&v,O=sk[.81i=l5Qb|Kx_4lZms:sPL%/5>{BR?"
+  set cookie: :"t,?t*n35oDQ3(<>C)5=-^shUb`s]E~rRb3C9/I[5e0DK-Y.T^{pBy7@BUw-*=]+B"
 end
 
 environment :prod do
   set include_erts: true
   set include_src: false
-  set cookie: :"[%j.HEFsZOPY*cqDq+Oz}If3O9&v,O=sk[.81i=l5Qb|Kx_4lZms:sPL%/5>{BR?"
+  set cookie: :"t,?t*n35oDQ3(<>C)5=-^shUb`s]E~rRb3C9/I[5e0DK-Y.T^{pBy7@BUw-*=]+B"
 end
 
 # You may define one or more releases in this file.
@@ -30,7 +30,13 @@ end
 # when running `mix release`, the first release in the file
 # will be used by default
 
+conform_prestart = Path.join(["#{:code.priv_dir(:conform)}",
+                             "bin",
+                             "pre_start.sh"])
+
 release :dublin_bus_telegram_bot do
   set version: current_version(:dublin_bus_telegram_bot)
+  set pre_start_hook: conform_prestart
+  plugin Conform.ReleasePlugin
 end
 
