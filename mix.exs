@@ -51,7 +51,7 @@ defmodule DublinBusTelegramBot.Mixfile do
      {:exsync, "~> 0.1", only: :dev},
      {:distillery, "~> 0.10"},
      {:edib, "~> 0.7"},
-     {:conform, "~> 2.0", override: true},
+     {:conform, "~> 2.1.1", override: true},
      {:commander, "~> 0.1"},
      {:meter, "~> 0.1"},
      {:credo, "~> 0.3", only: [:test, :dev]}
