@@ -95,6 +95,10 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
     "meter.tid": fn conf ->
       [{_, val}] = Conform.Conf.get(conf, "meter.tid")
       System.get_env("GOOGLE_ANALYTICS") || val
+    end,
+    "maru.Elixir.DublinBusTelegramBot.http.port": fn conf ->
+      [{_, val}] = Conform.Conf.get(conf, "maru.Elixir.DublinBusTelegramBot.http.port")
+      System.get_env("PORT") || val
     end
   ],
   validators: []
