@@ -3,8 +3,8 @@ defmodule DublinBusTelegramBot.Mixfile do
 
   def project do
     [app: :dublin_bus_telegram_bot,
-     version: "0.4.9",
-     elixir: "~> 1.2",
+     version: "0.5.0",
+     elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps]
