@@ -39,7 +39,8 @@ Search stops that match the name, if only one result is found it send also the t
   end
 
   defmeter stop(chat_id, stop) do
-    Stop.get_info(stop)
+    stop
+    |> Stop.get_info
     |> send_timetable(chat_id, stop)
   end
 
@@ -77,6 +78,16 @@ Bot icon made by Baianat from www.flaticon.com
     %{}
   end
 
+  defp join_line({line, destination}), do: "#{line} #{destination}"
+
+  defp join_stop(stop) do
+    lines = stop.lines
+    |> Enum.map(stop.lines, &join_line/1)
+    |> Enum.join("\n")
+
+    "** #{stop.ref} - #{stop.name} \n #{lines}"
+  end
+
   defmeter search(chat_id, q) do
     data = Stop.search(q)
 
@@ -87,13 +98,12 @@ Bot icon made by Baianat from www.flaticon.com
         send_timetable(stop,chat_id ,stop.ref)
       x ->
         Nadia.send_message(chat_id, "Search return #{x} results")
+
         message = data
-      |> Enum.map(fn(stop) ->
-        "** #{stop.ref} - #{stop.name} \n" <> (Enum.map(stop.lines, fn(line) -> "#{elem(line,0)} #{elem(line,1)} " end)
-      |> Enum.join("\n")) <> ""
-      end)
-      |> Enum.join("\n")
-      Nadia.send_message(chat_id, "```\n#{message}```", @as_markdown)
+        |> Enum.map(&join_stop/1)
+        |> Enum.join("\n")
+
+        Nadia.send_message(chat_id, "```\n#{message}```", @as_markdown)
     end
     data
   end
@@ -133,7 +143,7 @@ Bot icon made by Baianat from www.flaticon.com
     row = data.timetable
     |> Enum.find( fn (row) -> row.line == line end )
 
-    if(row == nil || row.time == "Due") do
+    if row == nil || row.time == "Due" do
       Quantum.delete_job(chat_id)
       Logger.info("[#{chat_id}] Remove watch stop #{stop} line #{line}")
     end

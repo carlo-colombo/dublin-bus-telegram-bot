@@ -23,13 +23,9 @@ defmodule DublinBusTelegramBot.Hook do
       get do
         {:ok, messages } = Nadia.get_updates
         messages
-        |> IO.inspect
         |> List.last
-        |> IO.inspect
         |> entry_point
-        |> IO.inspect
         |> get_resp
-        |> IO.inspect
         json conn, %{}
       end
     end
