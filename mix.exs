@@ -7,7 +7,7 @@ defmodule DublinBusTelegramBot.Mixfile do
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps]
+     deps: deps()]
   end
 
   # Configuration for the OTP application
@@ -44,17 +44,17 @@ defmodule DublinBusTelegramBot.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [{:nadia, "~> 0.4"},
-     {:quantum, "~> 1.8"},
-     {:httpoison, "~> 0.8"},
+     {:quantum, "~> 1.9"},
+     {:httpoison, "~> 0.11"},
      {:dublin_bus_api, "~> 0.1"},
      {:maru, "~> 0.9.2"},
      {:exsync, "~> 0.1", only: :dev},
-     {:distillery, "~> 0.10"},
+     {:distillery, "~> 1.2"},
      {:edib, "~> 0.7"},
-     {:conform, "~> 2.1.1", override: true},
+     {:conform, "~> 2.3", override: true},
      {:commander, "~> 0.1"},
      {:meter, "~> 0.1"},
-     {:credo, "~> 0.3", only: [:test, :dev]}
+     {:credo, "~> 0.7", only: [:test, :dev]}
    ]
   end
 end
