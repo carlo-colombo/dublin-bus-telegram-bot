@@ -141,7 +141,7 @@ Bot icon made by Baianat from www.flaticon.com
     data = Stop.get_info(stop)
 
     row = data.timetable
-    |> Enum.find( fn (row) -> row.line == line end )
+    |> Enum.find(fn (row) -> row.line == line end)
 
     if row == nil || row.time == "Due" do
       Quantum.delete_job(chat_id)

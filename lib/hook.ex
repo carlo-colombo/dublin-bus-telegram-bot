@@ -21,7 +21,7 @@ defmodule DublinBusTelegramBot.Hook do
       end
 
       get do
-        {:ok, messages } = Nadia.get_updates
+        {:ok, messages} = Nadia.get_updates
         messages
         |> List.last
         |> entry_point
@@ -52,7 +52,7 @@ defmodule DublinBusTelegramBot.Hook do
 
   dispatch to: Commands do
     command "/stop",   [:stop]
-    command "/watch",  [:stop, :line ]
+    command "/watch",  [:stop, :line]
     command "/search", [:q]
     command "/unwatch",[]
     command "/start",  []
@@ -61,7 +61,7 @@ defmodule DublinBusTelegramBot.Hook do
 
   def polling(offset \\ 0) do
     try do
-      {:ok, updates } = Nadia.get_updates([{:offset, offset}])
+      {:ok, updates} = Nadia.get_updates([{:offset, offset}])
       update_id = for update <- updates do
         entry_point(update)
         update.update_id
@@ -75,6 +75,6 @@ defmodule DublinBusTelegramBot.Hook do
 
       :timer.sleep(2000)
       spawn(fn  -> polling(offset) end)
-    catch _->nil end
+    catch _ -> nil end
   end
 end
