@@ -82,7 +82,7 @@ Bot icon made by Baianat from www.flaticon.com
 
   defp join_stop(stop) do
     lines = stop.lines
-    |> Enum.map(stop.lines, &join_line/1)
+    |> Enum.map(&join_line/1)
     |> Enum.join("\n")
 
     "** #{stop.ref} - #{stop.name} \n #{lines}"
@@ -94,8 +94,8 @@ Bot icon made by Baianat from www.flaticon.com
     case length(data) do
       1 ->
         Nadia.send_message(chat_id, "Search return only 1 result, here is the timetable")
-        stop = data |> hd
-        send_timetable(stop,chat_id ,stop.ref)
+        [stop] = data
+        send_timetable(stop, chat_id ,stop.ref)
       x ->
         Nadia.send_message(chat_id, "Search return #{x} results")
 
