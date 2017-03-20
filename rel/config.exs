@@ -30,13 +30,8 @@ end
 # when running `mix release`, the first release in the file
 # will be used by default
 
-conform_prestart = Path.join(["#{:code.priv_dir(:conform)}",
-                             "bin",
-                             "pre_start.sh"])
-
 release :dublin_bus_telegram_bot do
   set version: current_version(:dublin_bus_telegram_bot)
-  set pre_start_hook: conform_prestart
   plugin Conform.ReleasePlugin
 end
 
