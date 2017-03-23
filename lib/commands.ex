@@ -6,7 +6,7 @@ defmodule DublinBusTelegramBot.Commands do
 
   defmeter start(chat_id) do
     Nadia.send_message(chat_id, "
-Welcome to the Dublin Bus bot:
+    Welcome to the Dublin Bus bot:
 
 Access to the *Real Time Passenger Information (RTPI)* for Dublin Bus services. Data are retrieved parsing the still-in-development RTPI site. The html could change without notice and break the API, we don't take any responsibility for missed bus. The bot is precise as the dublin bus application or the screen at the stops.
 
@@ -14,28 +14,28 @@ _This service is in no way affiliated with Dublin Bus or the providers of the RT
 
 Available commands
 
-    /stop <stop number>
+/stop <stop number>
 Retrieve upcoming timetable at this stop
 ``` /stop 4242```
 
-    /watch <stop number> <line>
+/watch <stop number> <line>
 Send you a message every minute with ETA of the bus at the stop. It stop after the bus is Due or until command unwatch is sent. Only one watch at time is possible.
 ``` /watch 4242 184```
 
-    /unwatch
+/unwatch
 Stop watch
 ``` /unwatch```
 
-    /search <query>
+/search <query>
 Search stops that match the name, if only one result is found it send also the timetable.
 ``` /search Townsend Street```
 
-    /info
-    Return some info about the bot
+/info
+Return some info about the bot
 ``` /info```
 
 ", @as_markdown)
-   %{}
+    %{}
   end
 
   defmeter stop(chat_id, stop) do
@@ -50,11 +50,11 @@ Search stops that match the name, if only one result is found it send also the t
     {_, _, api_version} = List.keyfind(apps, :dublin_bus_api, 0)
 
     Nadia.send_message(chat_id, """
-Bot version: *#{app_version}*
-API version: *#{api_version}*
-API last time checked: *#{Stop.last_time_checked_formatted}*
+    Bot version: *#{app_version}*
+    API version: *#{api_version}*
+    API last time checked: *#{Stop.last_time_checked_formatted}*
 
-Bot icon made by Baianat from www.flaticon.com
+    Bot icon made by Baianat from www.flaticon.com
     """, @as_markdown)
 
     Stop.last_time_checked_formatted
@@ -125,17 +125,21 @@ Bot icon made by Baianat from www.flaticon.com
     |> Enum.join("\n")
 
     keyboard = [["/stop #{stop}"] | data.timetable
-                 |> Enum.map(fn r -> r.line end)
-               |> Enum.uniq
-               |> Enum.sort
-               |> Enum.map(fn l -> "/watch #{stop} #{l}" end)
-               |> Enum.chunk(3, 3, [])]
+                |> Enum.map(fn r -> r.line end)
+                |> Enum.uniq
+                |> Enum.sort
+                |> Enum.map(fn l -> "/watch #{stop} #{l}" end)
+                |> Enum.chunk(3, 3, [])]
+                |> Enum.map( fn r ->
+      Enum.map(r, fn b -> %{text: b, callback_data: b} end)
+    end)
 
-    Nadia.send_message(chat_id, title <> "```\n#{timetable}```" , @as_markdown ++ [
-      {:reply_markup, %{keyboard: keyboard}}])
+    {:ok, _} = Nadia.send_message(chat_id, title <> "```\n#{timetable}```" , @as_markdown ++ [
+                  {:reply_markup, %{inline_keyboard: keyboard}}
+                ])
+
     data
   end
-
 
   defp send_short_message(chat_id, stop, line) do
     data = Stop.get_info(stop)
