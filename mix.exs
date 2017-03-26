@@ -52,7 +52,7 @@ defmodule DublinBusTelegramBot.Mixfile do
      {:distillery, "~> 1.2"},
      {:edib, "~> 0.7"},
      {:conform, "~> 2.3", override: true},
-     {:commander, "~> 0.1"},
+     {:commander, "~> 1.0"},
      {:meter, "~> 0.1"},
      {:poison, "~> 3.0", override: true},
      {:credo, "~> 0.7", only: [:test, :dev]}
