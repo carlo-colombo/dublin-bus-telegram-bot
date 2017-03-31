@@ -38,7 +38,17 @@ Return some info about the bot
     %{}
   end
 
-  defmeter stop(chat_id, stop) do
+  defmeter stop(chat_id, stop, update), do: handle_stop(chat_id, stop, update)
+
+  defp handle_stop(chat_id, "IL" <> stop, %{callback_query: %{message: %{message_id: message_id}}}) do
+    {text, options} = stop
+    |> Stop.get_info
+    |> timetable(stop)
+
+    {:ok, _} = Nadia.API.request("editMessageText", [chat_id: chat_id, message_id: message_id, text: text] ++ options)
+  end
+
+  defp handle_stop(chat_id, stop, _) do
     stop
     |> Stop.get_info
     |> send_timetable(chat_id, stop)
@@ -117,26 +127,35 @@ Return some info about the bot
     %{warn: warn}
   end
 
-  defp send_timetable(data,chat_id, stop) do
+  defp to_button(text) when is_binary(text), do: %{text: text, callback_data: text}
+  defp to_button(button), do: button
+
+  defp timetable(data, stop) do
     title = "*#{stop} - #{data.name}*\n"
 
     timetable = data.timetable
     |> Enum.map(&to_line/1)
     |> Enum.join("\n")
 
-    keyboard = [["/stop #{stop}"] | data.timetable
+    keyboard = [["/stop #{stop}", %{text: "refresh 🔄", callback_data: "/stop IL#{stop}"}] | data.timetable
                 |> Enum.map(fn r -> r.line end)
                 |> Enum.uniq
                 |> Enum.sort
                 |> Enum.map(fn l -> "/watch #{stop} #{l}" end)
                 |> Enum.chunk(3, 3, [])]
                 |> Enum.map( fn r ->
-      Enum.map(r, fn b -> %{text: b, callback_data: b} end)
+      Enum.map(r, &to_button/1)
     end)
 
-    {:ok, _} = Nadia.send_message(chat_id, title <> "```\n#{timetable}```" , @as_markdown ++ [
-                  {:reply_markup, %{inline_keyboard: keyboard}}
-                ])
+
+    {title <> "```\n#{timetable}```" , @as_markdown ++ [
+      {:reply_markup, %{inline_keyboard: keyboard}}
+    ]}
+  end
+
+  defp send_timetable(data,chat_id, stop) do
+    {text, options} = timetable(data, stop)
+    {:ok, _} = Nadia.send_message(chat_id, text, options)
 
     data
   end
