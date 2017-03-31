@@ -40,18 +40,20 @@ Return some info about the bot
 
   defmeter stop(chat_id, stop, update), do: handle_stop(chat_id, stop, update)
 
-  defp handle_stop(chat_id, "IL" <> stop, %{callback_query: %{message: %{message_id: message_id}}}) do
+  defp handle_stop(chat_id, "IL" <> stop, %{callback_query: %{message: %{message_id: message_id}}}), do: stop_update_message(chat_id, stop, message_id)
+  defp handle_stop(chat_id, "IL" <> stop, %{"callback_query" => %{"message" => %{"message_id" => message_id}}}), do: stop_update_message(chat_id, stop, message_id)
+  defp handle_stop(chat_id, stop, _) do
+    stop
+    |> Stop.get_info
+    |> send_timetable(chat_id, stop)
+  end
+
+  defp stop_update_message(chat_id, stop, message_id) do
     {text, options} = stop
     |> Stop.get_info
     |> timetable(stop)
 
     {:ok, _} = Nadia.API.request("editMessageText", [chat_id: chat_id, message_id: message_id, text: text] ++ options)
-  end
-
-  defp handle_stop(chat_id, stop, _) do
-    stop
-    |> Stop.get_info
-    |> send_timetable(chat_id, stop)
   end
 
   defmeter info(chat_id) do
