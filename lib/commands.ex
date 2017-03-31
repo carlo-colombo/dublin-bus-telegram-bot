@@ -176,7 +176,11 @@ Return some info about the bot
     end
   end
 
-  defp to_line(%{time: time, line: line}) do
+  defp to_line(%{time: time, line: line, direction: direction}) when line == "Red" or line == "Green" do
+    time = String.rjust(time, 9)
+    "#{time} | #{direction}"
+  end
+  defp to_line(%{time: time, line: line, direction: direction}) do
     line = String.rjust(line, 5)
     "#{line} | #{time}"
   end
