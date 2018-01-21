@@ -38,38 +38,53 @@ Return some info about the bot
     %{}
   end
 
-  defmeter stop(chat_id, stop, update), do: handle_stop(chat_id, stop, update)
+  defmeter(stop(chat_id, stop, update), do: handle_stop(chat_id, stop, update))
 
-  defp handle_stop(chat_id, "IL" <> stop, %{callback_query: %{message: %{message_id: message_id}}}), do: stop_update_message(chat_id, stop, message_id)
-  defp handle_stop(chat_id, "IL" <> stop, %{"callback_query" => %{"message" => %{"message_id" => message_id}}}), do: stop_update_message(chat_id, stop, message_id)
+  defp handle_stop(chat_id, "IL" <> stop, %{callback_query: %{message: %{message_id: message_id}}}),
+       do: stop_update_message(chat_id, stop, message_id)
+
+  defp handle_stop(chat_id, "IL" <> stop, %{
+         "callback_query" => %{"message" => %{"message_id" => message_id}}
+       }),
+       do: stop_update_message(chat_id, stop, message_id)
+
   defp handle_stop(chat_id, stop, _) do
     stop
-    |> Stop.get_info
+    |> Stop.get_info()
     |> send_timetable(chat_id, stop)
   end
 
   defp stop_update_message(chat_id, stop, message_id) do
-    {text, options} = stop
-    |> Stop.get_info
-    |> timetable(stop)
+    {text, options} =
+      stop
+      |> Stop.get_info()
+      |> timetable(stop)
 
-    {:ok, _} = Nadia.API.request("editMessageText", [chat_id: chat_id, message_id: message_id, text: text] ++ options)
+    {:ok, _} =
+      Nadia.API.request(
+        "editMessageText",
+        [chat_id: chat_id, message_id: message_id, text: text] ++ options
+      )
   end
 
   defmeter info(chat_id) do
-    apps = Application.loaded_applications
+    apps = Application.loaded_applications()
     {_, _, app_version} = List.keyfind(apps, :dublin_bus_telegram_bot, 0)
     {_, _, api_version} = List.keyfind(apps, :dublin_bus_api, 0)
 
-    Nadia.send_message(chat_id, """
-    Bot version: *#{app_version}*
-    API version: *#{api_version}*
-    API last time checked: *#{Stop.last_time_checked_formatted}*
+    Nadia.send_message(
+      chat_id,
+      """
+      Bot version: *#{app_version}*
+      API version: *#{api_version}*
+      API last time checked: *#{Stop.last_time_checked_formatted()}*
 
-    Bot icon made by Baianat from www.flaticon.com
-    """, @as_markdown)
+      Bot icon made by Baianat from www.flaticon.com
+      """,
+      @as_markdown
+    )
 
-    Stop.last_time_checked_formatted
+    Stop.last_time_checked_formatted()
     %{}
   end
 
@@ -78,9 +93,9 @@ Return some info about the bot
       schedule: "* * * * *",
       task: fn -> send_short_message(chat_id, stop, line) end
     }
+
     Quantum.add_job(chat_id, job)
-    Nadia.send_message(chat_id, "Watch set",[
-          {:reply_markup, %{keyboard: [["/unwatch"]]}}])
+    Nadia.send_message(chat_id, "Watch set", [{:reply_markup, %{keyboard: [["/unwatch"]]}}])
     send_short_message(chat_id, stop, line)
     %{}
   end
@@ -93,9 +108,10 @@ Return some info about the bot
   defp join_line({line, destination}), do: "#{line} #{destination}"
 
   defp join_stop(stop) do
-    lines = stop.lines
-    |> Enum.map(&join_line/1)
-    |> Enum.join("\n")
+    lines =
+      stop.lines
+      |> Enum.map(&join_line/1)
+      |> Enum.join("\n")
 
     "** #{stop.ref} - #{stop.name} \n #{lines}"
   end
@@ -107,24 +123,28 @@ Return some info about the bot
       1 ->
         Nadia.send_message(chat_id, "Search return only 1 result, here is the timetable")
         [stop] = data
-        send_timetable(stop, chat_id ,stop.ref)
+        send_timetable(stop, chat_id, stop.ref)
+
       x ->
         Nadia.send_message(chat_id, "Search return #{x} results")
 
-        message = data
-        |> Enum.map(&join_stop/1)
-        |> Enum.join("\n")
+        message =
+          data
+          |> Enum.map(&join_stop/1)
+          |> Enum.join("\n")
 
         Nadia.send_message(chat_id, "```\n#{message}```", @as_markdown)
     end
+
     data
   end
 
   defmeter not_implemented(chat_id, command) do
     Nadia.send_message(chat_id, "Not yet implemented")
 
-    warn = "#{command} not yet implemented"
-    |> Logger.warn
+    warn =
+      "#{command} not yet implemented"
+      |> Logger.warn()
 
     %{warn: warn}
   end
@@ -135,27 +155,31 @@ Return some info about the bot
   defp timetable(data, stop) do
     title = "*#{stop} - #{data.name}*\n"
 
-    timetable = data.timetable
-    |> Enum.map(&to_line/1)
-    |> Enum.join("\n")
+    timetable =
+      data.timetable
+      |> Enum.map(&to_line/1)
+      |> Enum.join("\n")
 
-    keyboard = [["/stop #{stop}", %{text: "refresh 🔄", callback_data: "/stop IL#{stop}"}] | data.timetable
-                |> Enum.map(fn r -> r.line end)
-                |> Enum.uniq
-                |> Enum.sort
-                |> Enum.map(fn l -> "/watch #{stop} #{l}" end)
-                |> Enum.chunk(3, 3, [])]
-                |> Enum.map( fn r ->
-      Enum.map(r, &to_button/1)
-    end)
+    keyboard =
+      [
+        ["/stop #{stop}", %{text: "refresh 🔄", callback_data: "/stop IL#{stop}"}]
+        | data.timetable
+          |> Enum.map(& &1.line)
+          |> Enum.uniq()
+          |> Enum.sort()
+          |> Enum.map(&"/watch #{stop} #{&1}")
+          |> Enum.chunk(3, 3, [])
+      ]
+      |> Enum.map(fn r -> Enum.map(r, &to_button/1) end)
 
-
-    {title <> "```\n#{timetable}```" , @as_markdown ++ [
-      {:reply_markup, %{inline_keyboard: keyboard}}
-    ]}
+    {title <> "```\n#{timetable}```",
+     @as_markdown ++
+       [
+         {:reply_markup, %{inline_keyboard: keyboard}}
+       ]}
   end
 
-  defp send_timetable(data,chat_id, stop) do
+  defp send_timetable(data, chat_id, stop) do
     {text, options} = timetable(data, stop)
     {:ok, _} = Nadia.send_message(chat_id, text, options)
 
@@ -165,8 +189,9 @@ Return some info about the bot
   defp send_short_message(chat_id, stop, line) do
     data = Stop.get_info(stop)
 
-    row = data.timetable
-    |> Enum.find(fn (row) -> row.line == line end)
+    row =
+      data.timetable
+      |> Enum.find(fn row -> row.line == line end)
 
     if row == nil || row.time == "Due" do
       Quantum.delete_job(chat_id)
@@ -178,10 +203,12 @@ Return some info about the bot
     end
   end
 
-  defp to_line(%{time: time, line: line, direction: direction}) when line == "Red" or line == "Green" do
+  defp to_line(%{time: time, line: line, direction: direction})
+       when line == "Red" or line == "Green" do
     time = String.rjust(time, 9)
     "#{time} | #{direction}"
   end
+
   defp to_line(%{time: time, line: line, direction: direction}) do
     line = String.rjust(line, 5)
     "#{line} | #{time}"

@@ -17,25 +17,28 @@ defmodule DublinBusTelegramBot.Hook do
         |> entry_point
         |> get_resp
 
-        json conn, %{}
+        json(conn, %{})
       end
 
       get do
-        {:ok, messages} = Nadia.get_updates
+        {:ok, messages} = Nadia.get_updates()
+
         messages
-        |> List.last
+        |> List.last()
         |> entry_point
         |> get_resp
-        json conn, %{}
+
+        json(conn, %{})
       end
     end
 
     namespace :status do
       get do
-        json conn, %{ok: "System is running"}
+        json(conn, %{ok: "System is running"})
       end
+
       head do
-        json conn, %{ok: "System is running"}
+        json(conn, %{ok: "System is running"})
       end
     end
 
@@ -51,30 +54,36 @@ defmodule DublinBusTelegramBot.Hook do
   use Commander
 
   dispatch to: Commands do
-    command "/stop",   [:stop]
-    command "/watch",  [:stop, :line]
-    command "/search", [:q]
-    command "/unwatch",[]
-    command "/start",  []
-    command "/info",  []
+    command("/stop", [:stop])
+    command("/watch", [:stop, :line])
+    command("/search", [:q])
+    command("/unwatch", [])
+    command("/start", [])
+    command("/info", [])
   end
 
   def polling(offset \\ 0) do
     try do
       {:ok, updates} = Nadia.get_updates([{:offset, offset}])
-      update_id = for update <- updates do
-        entry_point(update)
-        update.update_id
-      end |> List.last
 
-      offset = if update_id == nil do
-        offset
-      else
-        update_id + 1
-      end
+      update_id =
+        for update <- updates do
+          entry_point(update)
+          update.update_id
+        end
+        |> List.last()
+
+      offset =
+        if update_id == nil do
+          offset
+        else
+          update_id + 1
+        end
 
       :timer.sleep(2000)
-      spawn(fn  -> polling(offset) end)
-    catch _ -> nil end
+      spawn(fn -> polling(offset) end)
+    catch
+      _ -> nil
+    end
   end
 end

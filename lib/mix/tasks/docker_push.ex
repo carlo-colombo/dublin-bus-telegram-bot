@@ -7,9 +7,9 @@ defmodule Mix.Tasks.DockerPush do
   def run(_args) do
     Edib.run(["--hex", "--strip"])
 
-    project = Enum.into(Mixfile.project, %{})
+    project = Enum.into(Mixfile.project(), %{})
 
-    for cmd <- commands(project)  do
+    for cmd <- commands(project) do
       Mix.Shell.IO.cmd(cmd, [])
     end
   end
@@ -17,7 +17,9 @@ defmodule Mix.Tasks.DockerPush do
   defp commands(%{version: version}) do
     [
       "docker tag local/dublin_bus_telegram_bot:#{version} carlocolombo/dublin_bus_telegram_bot:latest",
-      "docker tag local/dublin_bus_telegram_bot:#{version} carlocolombo/dublin_bus_telegram_bot:#{version}",
+      "docker tag local/dublin_bus_telegram_bot:#{version} carlocolombo/dublin_bus_telegram_bot:#{
+        version
+      }",
       "docker push carlocolombo/dublin_bus_telegram_bot:#{version}",
       "docker push carlocolombo/dublin_bus_telegram_bot:latest"
     ]
