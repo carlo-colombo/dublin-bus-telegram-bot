@@ -47,7 +47,7 @@ defmodule DublinBusTelegramBot.Mixfile do
      {:quantum, "~> 1.9"},
      {:httpoison, "~> 0.11"},
      {:dublin_bus_api, "~> 0.1"},
-     {:maru, "~> 0.9.2" },
+     {:maru, "~> 0.13.2" },
      {:exsync, "~> 0.1", only: :dev},
      {:distillery, "~> 1.2"},
      {:edib, "~> 0.7"},
