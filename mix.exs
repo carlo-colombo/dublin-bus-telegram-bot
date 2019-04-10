@@ -54,7 +54,7 @@ defmodule DublinBusTelegramBot.Mixfile do
      {:conform, "~> 2.3", override: true},
      {:commander, "~> 1.0"},
      {:meter, "~> 0.1"},
-     {:poison, "~> 3.0", override: true},
+     {:poison, "~> 4.0", override: true},
      {:credo, "~> 1.0", only: [:test, :dev]}
    ]
   end
