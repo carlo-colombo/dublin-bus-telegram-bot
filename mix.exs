@@ -49,7 +49,7 @@ defmodule DublinBusTelegramBot.Mixfile do
      {:dublin_bus_api, "~> 0.1"},
      {:maru, "~> 0.9.2" },
      {:exsync, "~> 0.1", only: :dev},
-     {:distillery, "~> 1.2"},
+     {:distillery, "~> 2.1"},
      {:edib, "~> 0.7"},
      {:conform, "~> 2.3", override: true},
      {:commander, "~> 1.0"},
