@@ -44,7 +44,7 @@ defmodule DublinBusTelegramBot.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [{:nadia, git: "https://github.com/zhyu/nadia", override: true},
-     {:quantum, "~> 1.9"},
+     {:quantum, "~> 3.1"},
      {:httpoison, "~> 0.11"},
      {:dublin_bus_api, "~> 0.1"},
      {:maru, "~> 0.9.2" },
